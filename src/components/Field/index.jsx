@@ -1,9 +1,12 @@
+import { useSelector } from "react-redux"
 import "./field.css"
 
 const Field = () => {
+    const gameObj = useSelector((state) => state.game)
+    console.log(gameObj)
     return (
         <div className="field-wrapper">
-            <div className="end-zone-1"><div>Team One</div></div>
+            <div className="end-zone-1" style={{ backgroundColor: gameObj.teamOnePrimaryColor }}><div style={{ color: gameObj.teamOneSecondaryColor }}>{gameObj.teamOneName}</div></div>
             <div className="field-body">
                 <div className="ten-yard" id="first"></div>
                 <div className="ten-yard"></div>
@@ -15,7 +18,7 @@ const Field = () => {
                 <div className="ten-yard"></div>
                 <div className="ten-yard" id="last"></div>
             </div>
-            <div className="end-zone-2"><div>Team Two</div></div>
+            <div className="end-zone-2" style={{ backgroundColor: gameObj.teamTwoPrimaryColor }}><div style={{ color: gameObj.teamTwoSecondaryColor }}>{gameObj.teamTwoName}</div></div>
         </div>
     )
 }
