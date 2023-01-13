@@ -3,7 +3,6 @@ import "./field.css"
 
 const Field = () => {
     const gameObj = useSelector((state) => state.game)
-    console.log(gameObj)
     return (
         <div className="field-wrapper">
             <div className="end-zone-1" style={{ backgroundColor: gameObj.teamOnePrimaryColor }}><div style={{ color: gameObj.teamOneSecondaryColor }}>{gameObj.teamOneName}</div></div>

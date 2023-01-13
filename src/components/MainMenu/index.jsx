@@ -29,6 +29,28 @@ const MainMenu = () => {
         }
         dispatch(updateGame(payload))
     }, [teamOneName, teamOnePrimaryColor, teamOneSecondaryColor, teamTwoName, teamTwoPrimaryColor, teamTwoSecondaryColor, totalPossessions, dispatch])
+
+    const handleStart = () => {
+        let payload = {
+            teamOneName,
+            teamOnePrimaryColor,
+            teamOneSecondaryColor,
+            teamTwoName,
+            teamTwoPrimaryColor,
+            teamTwoSecondaryColor,
+            totalPossessions,
+            gameAction: "coin-flip",
+            teamOneScore: 0,
+            teamTwoScore: 0,
+            quarter: 1,
+            down: "-",
+            toGo: "-",
+            ballOn: "-",
+            possession: "-"
+        }
+        dispatch(updateGame(payload))
+        navigate("/game")
+    }
     return (
         <div className="main-menu-wrapper">
             <div className="main-menu-top-half">
@@ -65,7 +87,7 @@ const MainMenu = () => {
                             <label>Possessions per Quarter: {totalPossessions}</label>
                             <input className="slider" type="range" min={1} max={8} value={totalPossessions} onChange={(e) => setTotalPossessions(e.target.value)} ></input>
                         </div>
-                        <button className="main-menu-button" id="start-game-button" onClick={() => navigate("/game")}>Start Game</button>
+                        <button className="main-menu-button" id="start-game-button" onClick={handleStart}>Start Game</button>
                     </div>
                     <div className="team-select-options-wrapper">
                         <h2>Player Two</h2>
