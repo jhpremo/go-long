@@ -52,6 +52,7 @@
 
 .field-body {
     width: 80%;
+    position: relative;
     display: flex;
     gap: 9.5%;
     background-image: url("../../../public/grass.jpg");
@@ -75,4 +76,28 @@
 
 #last {
     margin-right: 9.5%;
+}
+
+.first-down {
+    position: absolute;
+    height: 100%;
+    width: 0.5%;
+    background-color: yellow;
+    z-index: 1;
+}
+
+.no-first-down {
+    position: absolute;
+    display: none;
+}
+
+.football {
+    box-sizing: border-box;
+    position: absolute;
+    background-color: brown;
+    clip-path: ellipse(50% 25% at 50% 50%);
+    width: 4%;
+    aspect-ratio: 1/1;
+    z-index: 1;
+    top: 47%;
 }

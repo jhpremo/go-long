@@ -44,11 +44,11 @@ const KickOff = () => {
             let changes = {}
             if (result === "TD") {
                 if (gameObj.direction === "-->") {
-                    setMessage(`${gameObj.teamOneName} returns the kick off for a touch down!!! click to continue`)
+                    setMessage(`${gameObj.teamOneName} return the kick off for a touch down!!! click to continue`)
                     changes['teamOneScore'] = gameObj.teamOneScore + 6
                     // changes['gameAction'] = "extra-point"
                 } else if (gameObj.direction === "<--") {
-                    setMessage(`${gameObj.teamTwoName} returns the kick off for a touch down!!! click to continue`)
+                    setMessage(`${gameObj.teamTwoName} return the kick off for a touch down!!! click to continue`)
                     changes['teamTwoScore'] = gameObj.teamTwoScore + 6
                     // changes['gameAction'] = "extra-point"
                 }
@@ -68,11 +68,11 @@ const KickOff = () => {
                 changes['down'] = 1
             } else {
                 if (gameObj.direction === "-->") {
-                    setMessage(`${gameObj.teamOneName} returns the kick off ${result} yards!, click to continue`)
+                    setMessage(`${gameObj.teamOneName} return the kick off ${result} yards!, click to continue`)
                     changes['ballOn'] = result
                     changes['toGo'] = 10
                 } else {
-                    setMessage(`${gameObj.teamTwoName} returns the kick off ${result} yards!, click to continue`)
+                    setMessage(`${gameObj.teamTwoName} return the kick off ${result} yards!, click to continue`)
                     changes['ballOn'] = 100 - result
                     changes['toGo'] = 10
                 }
