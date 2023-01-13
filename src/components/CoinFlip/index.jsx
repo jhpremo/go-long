@@ -17,7 +17,7 @@ const CoinFlip = () => {
         setFlipped(true)
         let result
         const flip = () => {
-            result = (Math.trunc(Math.random() * 100) % 2)
+            result = (Math.floor(Math.random() * 100) % 2)
             if (result) {
                 setCoinColor(gameObj.teamTwoPrimaryColor)
                 setCoinColor2(gameObj.teamTwoSecondaryColor)
@@ -27,7 +27,6 @@ const CoinFlip = () => {
                 setCoinColor(gameObj.teamOnePrimaryColor)
                 setCoinColor2(gameObj.teamOneSecondaryColor)
                 setCoinText(gameObj.teamOneName.slice(0, 1))
-
             }
         }
         let interval = setInterval(flip, 200)
@@ -35,15 +34,18 @@ const CoinFlip = () => {
 
         const finish = () => {
             clearInterval(interval)
-            let possession
+            let direction
+            let startingTeam
             if (result) {
                 setMessage(`${gameObj.teamTwoName} will recieve the Kick Off, click to continue`)
-                possession = "<--"
+                direction = "<--"
+                startingTeam = 2
             } else {
                 setMessage(`${gameObj.teamOneName} will recieve the Kick Off, click to continue`)
-                possession = "-->"
+                direction = "-->"
+                startingTeam = 1
             }
-            let payload = { ...gameObj, possession }
+            let payload = { ...gameObj, direction, startingTeam }
             dispatch(updateGame(payload))
             setReady("pointer")
         }

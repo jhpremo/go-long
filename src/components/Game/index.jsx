@@ -3,17 +3,25 @@ import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import CoinFlip from "../CoinFlip"
 import Field from "../Field"
+import KickOff from "../KickOff"
 import "./game.css"
 
 const Game = () => {
     const navigate = useNavigate()
     const gameObj = useSelector((state) => state.game)
-
+    const [ballOn, setBallOn] = useState("-")
 
     useEffect(() => {
         if (!gameObj?.teamOnePrimaryColor) navigate("/")
     }, [])
 
+    useEffect(() => {
+        if (gameObj.ballOn === "-") setBallOn('-')
+        else if (gameObj.ballOn > 50) setBallOn(100 - gameObj.ballOn)
+        else {
+            setBallOn(gameObj.ballOn)
+        }
+    }, [gameObj.ballOn])
     return (
         <div className="game-wrapper">
             <div className="game-top-wrapper">
@@ -43,16 +51,17 @@ const Game = () => {
                         </div>
                         <div className="score-board-section">
                             <label className="score-board-label">Ball On</label>
-                            <div className="score-board-content">{gameObj.ballOn}</div>
+                            <div className="score-board-content">{ballOn}</div>
                         </div>
                         <div className="score-board-section">
-                            <label className="score-board-label">Possession</label>
-                            <div className="score-board-content">{gameObj.possession}</div>
+                            <label className="score-board-label">Direction</label>
+                            <div className="score-board-content">{gameObj.direction}</div>
                         </div>
                     </div>
                 </div>
                 <div className="gameplay-wrapper">
                     {gameObj.gameAction === "coin-flip" && <CoinFlip />}
+                    {gameObj.gameAction === "kick-off" && <KickOff />}
                 </div>
             </div>
             <div className="game-bottom-wrapper">

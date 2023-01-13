@@ -46,7 +46,7 @@ const MainMenu = () => {
             down: "-",
             toGo: "-",
             ballOn: "-",
-            possession: "-"
+            direction: "-"
         }
         dispatch(updateGame(payload))
         navigate("/game")
