@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import { updateGame } from "../../store/gameReducer"
 import Field from "../Field"
 import "./main-menu.css"
 
 const MainMenu = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [toggleMainMenu, setToggleMainMenu] = useState(true)
     const [teamOneName, setTeamOneName] = useState('Red Wolves')
     const [teamOnePrimaryColor, setTeamOnePrimaryColor] = useState('#FF2708')
@@ -13,6 +15,7 @@ const MainMenu = () => {
     const [teamTwoName, setTeamTwoName] = useState('Blue Birds')
     const [teamTwoPrimaryColor, setTeamTwoPrimaryColor] = useState('#0101FD')
     const [teamTwoSecondaryColor, setTeamTwoSecondaryColor] = useState('#FFFFFF')
+    const [totalPossessions, setTotalPossessions] = useState(4)
 
     useEffect(() => {
         let payload = {
@@ -21,21 +24,23 @@ const MainMenu = () => {
             teamOneSecondaryColor,
             teamTwoName,
             teamTwoPrimaryColor,
-            teamTwoSecondaryColor
+            teamTwoSecondaryColor,
+            totalPossessions
         }
         dispatch(updateGame(payload))
-    }, [teamOneName, teamOnePrimaryColor, teamOneSecondaryColor, teamTwoName, teamTwoPrimaryColor, teamTwoSecondaryColor, dispatch])
+    }, [teamOneName, teamOnePrimaryColor, teamOneSecondaryColor, teamTwoName, teamTwoPrimaryColor, teamTwoSecondaryColor, totalPossessions, dispatch])
     return (
         <div className="main-menu-wrapper">
             <div className="main-menu-top-half">
                 {toggleMainMenu && <h1 className="main-menu-title">Go Long</h1>}
                 {toggleMainMenu && <div className="main-menu-button-container">
                     <button onClick={() => setToggleMainMenu(false)} className="main-menu-button">New Game</button>
-                    <button className="main-menu-button">Resume</button>
-                    <button className="main-menu-button">Options</button>
+                    {/* <button className="main-menu-button">Resume</button>
+                    <button className="main-menu-button">Options</button> */}
                 </div>}
                 {!toggleMainMenu && <div className="team-select-wrapper">
-                    <div className="team-select-one-wrapper">
+                    <button onClick={() => setToggleMainMenu(true)} className="back-button"><i className="fa-solid fa-arrow-left" /></button>
+                    <div className="team-select-options-wrapper">
                         <h2>Player One</h2>
                         <div className="team-select-input-wrapper">
                             <label>Team Name</label>
@@ -54,7 +59,15 @@ const MainMenu = () => {
                         <div className="team-select-input-wrapper">
                         </div>
                     </div>
-                    <div className="team-select-two-wrapper">
+                    <div className="game-options-wrapper">
+                        <h2>Game Options</h2>
+                        <div className="team-select-input-wrapper">
+                            <label>Possessions per Quarter: {totalPossessions}</label>
+                            <input className="slider" type="range" min={1} max={8} value={totalPossessions} onChange={(e) => setTotalPossessions(e.target.value)} ></input>
+                        </div>
+                        <button className="main-menu-button" id="start-game-button" onClick={() => navigate("/game")}>Start Game</button>
+                    </div>
+                    <div className="team-select-options-wrapper">
                         <h2>Player Two</h2>
                         <div className="team-select-input-wrapper">
                             <label>Team Name</label>
