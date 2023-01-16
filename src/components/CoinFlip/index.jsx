@@ -61,7 +61,7 @@ const CoinFlip = () => {
         <div className="coin-flip-wrapper" onClick={handleReady} style={{ cursor: ready }}>
             <h2>Possession Coin Flip</h2>
             <div onClick={flipCoin} className="coin" style={{ backgroundColor: coinColor }}><span style={{ color: coinColor2 }}>{coinText}</span></div>
-            {!!message.length && <div>{message}</div>}
+            {<div className="message">{message}</div>}
         </div>
     )
 }

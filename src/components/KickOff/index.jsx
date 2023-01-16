@@ -7,10 +7,10 @@ import "./kick-off.css"
 const KickOff = () => {
     const dispatch = useDispatch()
     const gameObj = useSelector((state) => state.game)
-    const [faceUp, setFaceUp] = useState("X")
+    const [faceUp, setFaceUp] = useState("20")
     const [rolled, setRolled] = useState(false)
     const [ready, setReady] = useState("default")
-    const [circle, setCircle] = useState("circle")
+    const [circle, setCircle] = useState("n/a")
     const [message, setMessage] = useState("")
     let kickDieSides = {
         "1": "X",
@@ -46,15 +46,12 @@ const KickOff = () => {
                 if (gameObj.direction === "-->") {
                     setMessage(`${gameObj.teamOneName} return the kick off for a touch down!!! click to continue`)
                     changes['teamOneScore'] = gameObj.teamOneScore + 6
-                    // changes['gameAction'] = "extra-point"
+                    changes['ballOn'] = 100
                 } else if (gameObj.direction === "<--") {
                     setMessage(`${gameObj.teamTwoName} return the kick off for a touch down!!! click to continue`)
                     changes['teamTwoScore'] = gameObj.teamTwoScore + 6
-                    // changes['gameAction'] = "extra-point"
+                    changes['ballOn'] = 0
                 }
-                changes['ballOn'] = "-"
-                changes['toGo'] = "-"
-                changes['down'] = '-'
             } else if (result === "X") {
                 if (gameObj.direction === "-->") {
                     setMessage(`Touch back ${gameObj.teamOneName} starts at the 20 yard line, click to continue`)
@@ -83,12 +80,26 @@ const KickOff = () => {
             setReady("pointer")
         }
     }
+
+    const handleReady = () => {
+        if (ready === "pointer" && faceUp === "TD") {
+            let payload = { ...gameObj, gameAction: "extra-point" }
+            payload.down = "-"
+            payload.toGo = "-"
+            payload.ballOn = "-"
+            dispatch(updateGame(payload))
+        } else if (ready === "pointer") {
+            let payload = { ...gameObj, gameAction: "drive" }
+            dispatch(updateGame(payload))
+        }
+    }
+
     return (
-        <div className="kick-off-wrapper">
+        <div onClick={handleReady} className="kick-off-wrapper">
             {gameObj.direction === "-->" && <h2>{gameObj.teamOneName} will roll for kick return</h2>}
             {gameObj.direction === "<--" && <h2>{gameObj.teamTwoName} will roll for kick return</h2>}
             <div className="kick-die" onClick={rollDie}><div className="kick-die-text" id={circle}>{faceUp}</div></div>
-            {!!message.length && <div>{message}</div>}
+            {<div className="message">{message}</div>}
         </div>
     )
 }
