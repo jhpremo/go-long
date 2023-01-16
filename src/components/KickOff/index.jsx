@@ -28,7 +28,7 @@ const KickOff = () => {
     }
     const rollDie = () => {
         if (rolled) return
-        // setRolled(true)
+        setRolled(true)
         let result
         const roll = () => {
             result = kickDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
@@ -75,6 +75,8 @@ const KickOff = () => {
                 }
                 changes['down'] = 1
             }
+            if (gameObj.drive === "-") changes['drive'] = 1
+            else changes['drive'] += 1
             let payload = { ...gameObj, ...changes }
             dispatch(updateGame(payload))
             setReady("pointer")
@@ -95,7 +97,7 @@ const KickOff = () => {
     }
 
     return (
-        <div onClick={handleReady} className="kick-off-wrapper">
+        <div onClick={handleReady} className="kick-off-wrapper" style={{ cursor: ready }}>
             {gameObj.direction === "-->" && <h2>{gameObj.teamOneName} will roll for kick return</h2>}
             {gameObj.direction === "<--" && <h2>{gameObj.teamTwoName} will roll for kick return</h2>}
             <div className="kick-die" onClick={rollDie}><div className="kick-die-text" id={circle}>{faceUp}</div></div>

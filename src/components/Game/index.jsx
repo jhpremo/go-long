@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import CoinFlip from "../CoinFlip"
+import Drive from "../Drive/Drive"
 import Field from "../Field"
 import KickOff from "../KickOff"
 import "./game.css"
@@ -36,6 +37,10 @@ const Game = () => {
                             <div className="score-board-content">{gameObj.quarter}</div>
                         </div>
                         <div className="score-board-section">
+                            <label className="score-board-label">Drive</label>
+                            <div className="score-board-content">{gameObj.drive}</div>
+                        </div>
+                        <div className="score-board-section">
                             <label className="score-board-label">Team Two</label>
                             <div className="score-board-content">{gameObj.teamTwoScore}</div>
                         </div>
@@ -62,6 +67,7 @@ const Game = () => {
                 <div className="gameplay-wrapper">
                     {gameObj.gameAction === "coin-flip" && <CoinFlip />}
                     {gameObj.gameAction === "kick-off" && <KickOff />}
+                    {gameObj.gameAction === "drive" && <Drive />}
                 </div>
             </div>
             <div className="game-bottom-wrapper">
