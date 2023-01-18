@@ -13,7 +13,6 @@ const Drive = () => {
     const [faceUpGreen3, setFaceUpGreen3] = useState()
     const [canRoll, setCanRoll] = useState(true)
     const [rollButtonColor, setRollButtonColor] = useState("#c7f4c7")
-    const [circle, setCircle] = useState("n/a")
     const [usedBlue, setUsedBlue] = useState(false)
     const [usedGreen1, setUsedGreen1] = useState(false)
     const [usedGreen2, setUsedGreen2] = useState(false)
@@ -70,6 +69,16 @@ const Drive = () => {
         "12": "turnover",
     }
 
+    const resetFirstDown = () => {
+        setFaceUpBlue()
+        setFaceUpGreen1()
+        setFaceUpGreen2()
+        setFaceUpGreen3()
+        setUsedBlue(false)
+        setUsedGreen1(false)
+        setUsedGreen2(false)
+        setUsedGreen3(false)
+    }
     const handleRoll = () => {
         if (!canRoll) return
         setCanRoll(false)
@@ -90,7 +99,7 @@ const Drive = () => {
 
         const finish = () => {
             clearInterval(interval)
-            let changes = {}
+            // let changes = {}
 
             if (faceUpWhite === "ball") {
 
@@ -99,7 +108,43 @@ const Drive = () => {
     }
 
     useEffect(() => {
-
+        let changes = {}
+        if (gameObj.toGo <= 0) {
+            if ((gameObj.ballOn >= 90 && gameObj.direction === "-->") || (gameObj.ballOn <= 10 && gameObj.direction === "<--")) {
+                changes.toGo = "-"
+            } else {
+                changes.toGo = 10
+            }
+            changes.down = 1
+            resetFirstDown()
+        }
+        if (gameObj.ballOn <= 0) {
+            if (gameObj.direction === "<--") {
+                changes['teamTwoScore'] = gameObj.teamTwoScore + 6
+                changes.ballOn = 0
+                changes.gameAction = "post-touchdown"
+            } else {
+                changes['teamOneScore'] = gameObj.teamTwoScore + 2
+                changes.ballOn = 0
+                changes.gameAction = "post-saftey"
+            }
+            changes.toGo = "-"
+            changes.down = "-"
+        } else if (gameObj.ballOn >= 100) {
+            if (gameObj.direction === "-->") {
+                changes['teamOneScore'] = gameObj.teamTwoScore + 6
+                changes.ballOn = 100
+                changes.gameAction = "post-touchdown"
+            } else {
+                changes['teamTwoScore'] = gameObj.teamTwoScore + 2
+                changes.ballOn = 100
+                changes.gameAction = "post-saftey"
+            }
+            changes.toGo = "-"
+            changes.down = "-"
+        }
+        let payload = { ...gameObj, ...changes }
+        dispatch(updateGame(payload))
     }, [gameObj.ballOn, gameObj.toGo])
 
     const handlePlayBlue = () => {
@@ -107,21 +152,18 @@ const Drive = () => {
         setUsedBlue(true)
         let changes = {}
         if (faceUpBlue === "TD") {
-            let changes = {}
             if (gameObj.direction === "-->") {
-                changes['teamOneScore'] = gameObj.teamOneScore + 6
                 changes['ballOn'] = 100
             } else if (gameObj.direction === "<--") {
-                changes['teamTwoScore'] = gameObj.teamTwoScore + 6
                 changes['ballOn'] = 0
             }
         } else {
             if (gameObj.direction === "-->") {
                 changes['ballOn'] = gameObj.ballOn + faceUpBlue
-                changes['toGo'] = gameObj.toGo - faceUpBlue
+                if (gameObj.toGo !== "-") changes['toGo'] = gameObj.toGo - faceUpBlue
             } else if (gameObj.direction === "<--") {
                 changes['ballOn'] = gameObj.ballOn - faceUpBlue
-                changes['toGo'] = gameObj.toGo - faceUpBlue
+                if (gameObj.toGo !== "-") changes['toGo'] = gameObj.toGo - faceUpBlue
             }
         }
         changes['down'] = gameObj.down + 1
@@ -131,7 +173,60 @@ const Drive = () => {
     }
 
     const handlePlayGreen1 = () => {
+        if (!faceUpGreen1 && faceUpGreen1 !== 0) return
         setUsedGreen1(true)
+        let changes = {}
+
+        if (gameObj.direction === "-->") {
+            changes['ballOn'] = gameObj.ballOn + faceUpGreen1
+            if (gameObj.toGo !== "-") changes['toGo'] = gameObj.toGo - faceUpGreen1
+        } else if (gameObj.direction === "<--") {
+            changes['ballOn'] = gameObj.ballOn - faceUpGreen1
+            if (gameObj.toGo !== "-") changes['toGo'] = gameObj.toGo - faceUpGreen1
+        }
+
+        changes['down'] = gameObj.down + 1
+        setCanRoll(true)
+        let payload = { ...gameObj, ...changes }
+        dispatch(updateGame(payload))
+    }
+
+    const handlePlayGreen2 = () => {
+        if (!faceUpGreen2 && faceUpGreen2 !== 0) return
+        setUsedGreen2(true)
+        let changes = {}
+
+        if (gameObj.direction === "-->") {
+            changes['ballOn'] = gameObj.ballOn + faceUpGreen2
+            if (gameObj.toGo !== "-") changes['toGo'] = gameObj.toGo - faceUpGreen2
+        } else if (gameObj.direction === "<--") {
+            changes['ballOn'] = gameObj.ballOn - faceUpGreen2
+            if (gameObj.toGo !== "-") changes['toGo'] = gameObj.toGo - faceUpGreen2
+        }
+
+        changes['down'] = gameObj.down + 1
+        setCanRoll(true)
+        let payload = { ...gameObj, ...changes }
+        dispatch(updateGame(payload))
+    }
+
+    const handlePlayGreen3 = () => {
+        if (!faceUpGreen3 && faceUpGreen3 !== 0) return
+        setUsedGreen3(true)
+        let changes = {}
+
+        if (gameObj.direction === "-->") {
+            changes['ballOn'] = gameObj.ballOn + faceUpGreen3
+            if (gameObj.toGo !== "-") changes['toGo'] = gameObj.toGo - faceUpGreen3
+        } else if (gameObj.direction === "<--") {
+            changes['ballOn'] = gameObj.ballOn - faceUpGreen3
+            if (gameObj.toGo !== "-") changes['toGo'] = gameObj.toGo - faceUpGreen3
+        }
+
+        changes['down'] = gameObj.down + 1
+        setCanRoll(true)
+        let payload = { ...gameObj, ...changes }
+        dispatch(updateGame(payload))
     }
 
 
@@ -154,15 +249,15 @@ const Drive = () => {
                 </div>
                 <div className="option-wrapper">
                     <div className="green-die"><div className="kick-die-text">{faceUpGreen1}</div></div>
-                    <button className="drive-button">Run Play</button>
+                    {!usedGreen1 && <button onClick={handlePlayGreen1} className="drive-button">Run Play</button>}
                 </div>
                 <div className="option-wrapper">
                     <div className="green-die"><div className="kick-die-text">{faceUpGreen2}</div></div>
-                    <button className="drive-button">Run Play</button>
+                    {!usedGreen2 && <button onClick={handlePlayGreen2} className="drive-button">Run Play</button>}
                 </div>
                 <div className="option-wrapper">
                     <div className="green-die"><div className="kick-die-text">{faceUpGreen3}</div></div>
-                    <button className="drive-button">Run Play</button>
+                    {!usedGreen3 && <button onClick={handlePlayGreen3} className="drive-button">Run Play</button>}
                 </div>
             </div>
             <div className="punt-fg-wrapper">

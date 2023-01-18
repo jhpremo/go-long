@@ -17,9 +17,9 @@ const Field = () => {
             if (gameObj.ballOn >= 100 || gameObj.ballOn <= 1) {
                 setToggleFirstDown('no-first-down')
                 setToggleBlueLine("no-first-down")
-            }
-            else {
-                setToggleFirstDown('first-down')
+            } else {
+                if (gameObj.toGo === "-") setToggleFirstDown('no-first-down')
+                else setToggleFirstDown('first-down')
                 setToggleBlueLine("blue-line")
             }
             setToggleFootball('football')
