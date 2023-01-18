@@ -5,6 +5,14 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
+}
+
+.drive-header {
+    margin: 0px;
+    font-size: 1.8vw;
+    position: absolute;
+    top: 0px;
 }
 
 .dice-wrapper {

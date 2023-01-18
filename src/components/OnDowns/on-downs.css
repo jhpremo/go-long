@@ -1,0 +1,25 @@
+.on-downs-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5%;
+    cursor: pointer;
+}
+
+.on-downs-wrapper>h2 {
+    font-size: 2vw;
+    margin: 0px;
+}
+
+.on-downs-wrapper>h3 {
+    font-size: 1.5vw;
+    margin: 0px;
+}
+
+.on-downs-wrapper>h4 {
+    font-size: 1.3vw;
+    margin: 0px;
+}

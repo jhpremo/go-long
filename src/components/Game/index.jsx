@@ -5,6 +5,7 @@ import CoinFlip from "../CoinFlip"
 import Drive from "../Drive"
 import Field from "../Field"
 import KickOff from "../KickOff"
+import OnDowns from "../OnDowns"
 import "./game.css"
 
 const Game = () => {
@@ -68,6 +69,9 @@ const Game = () => {
                     {gameObj.gameAction === "coin-flip" && <CoinFlip />}
                     {gameObj.gameAction === "kick-off" && <KickOff />}
                     {gameObj.gameAction === "drive" && <Drive />}
+                    {gameObj.gameAction === "post-turnover-on-downs" && <OnDowns />}
+                    {gameObj.gameAction === "post-touchdown" && <h2>Touchdown</h2>}
+                    {gameObj.gameAction === "post-saftey" && <h2>Saftey</h2>}
                 </div>
             </div>
             <div className="game-bottom-wrapper">

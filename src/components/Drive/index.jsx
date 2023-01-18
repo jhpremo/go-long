@@ -17,7 +17,7 @@ const Drive = () => {
     const [usedGreen1, setUsedGreen1] = useState(false)
     const [usedGreen2, setUsedGreen2] = useState(false)
     const [usedGreen3, setUsedGreen3] = useState(false)
-    const [message, setMessage] = useState("")
+
     useEffect(() => {
         if (canRoll) {
             setRollButtonColor("#c7f4c7")
@@ -142,10 +142,12 @@ const Drive = () => {
             }
             changes.toGo = "-"
             changes.down = "-"
+        } else if (gameObj.down === 4 && usedBlue && usedGreen1 && usedGreen2 && usedGreen3 && !changes.down) {
+            changes.gameAction = "post-turnover-on-downs"
         }
         let payload = { ...gameObj, ...changes }
         dispatch(updateGame(payload))
-    }, [gameObj.ballOn, gameObj.toGo])
+    }, [gameObj.ballOn, gameObj.toGo, gameObj.down, usedBlue, usedGreen1, usedGreen2, usedGreen3])
 
     const handlePlayBlue = () => {
         if (!faceUpBlue && faceUpBlue !== 0) return
@@ -166,7 +168,7 @@ const Drive = () => {
                 if (gameObj.toGo !== "-") changes['toGo'] = gameObj.toGo - faceUpBlue
             }
         }
-        changes['down'] = gameObj.down + 1
+        if (gameObj.down < 4) changes['down'] = gameObj.down + 1
         setCanRoll(true)
         let payload = { ...gameObj, ...changes }
         dispatch(updateGame(payload))
@@ -185,7 +187,7 @@ const Drive = () => {
             if (gameObj.toGo !== "-") changes['toGo'] = gameObj.toGo - faceUpGreen1
         }
 
-        changes['down'] = gameObj.down + 1
+        if (gameObj.down < 4) changes['down'] = gameObj.down + 1
         setCanRoll(true)
         let payload = { ...gameObj, ...changes }
         dispatch(updateGame(payload))
@@ -204,7 +206,7 @@ const Drive = () => {
             if (gameObj.toGo !== "-") changes['toGo'] = gameObj.toGo - faceUpGreen2
         }
 
-        changes['down'] = gameObj.down + 1
+        if (gameObj.down < 4) changes['down'] = gameObj.down + 1
         setCanRoll(true)
         let payload = { ...gameObj, ...changes }
         dispatch(updateGame(payload))
@@ -223,7 +225,7 @@ const Drive = () => {
             if (gameObj.toGo !== "-") changes['toGo'] = gameObj.toGo - faceUpGreen3
         }
 
-        changes['down'] = gameObj.down + 1
+        if (gameObj.down < 4) changes['down'] = gameObj.down + 1
         setCanRoll(true)
         let payload = { ...gameObj, ...changes }
         dispatch(updateGame(payload))
@@ -232,6 +234,8 @@ const Drive = () => {
 
     return (
         <div className="drive-wrapper">
+            {gameObj.direction === "-->" && <h2 className="drive-header">{gameObj.teamOneName} Drive</h2>}
+            {gameObj.direction === "<--" && <h2 className="drive-header">{gameObj.teamTwoName} Drive</h2>}
             <div className="dice-wrapper">
                 <div className="option-wrapper">
                     <div className="white-die">
