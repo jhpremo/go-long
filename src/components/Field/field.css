@@ -21,7 +21,7 @@
 .end-zone-1>div {
     transform: rotate(180deg);
     color: white;
-    font-size: 40px;
+    font-size: 3vw;
     box-sizing: border-box;
     writing-mode: vertical-lr;
     white-space: nowrap;
@@ -44,7 +44,7 @@
 
 .end-zone-2>div {
     color: white;
-    font-size: 40px;
+    font-size: 3vw;
     box-sizing: border-box;
     writing-mode: vertical-lr;
     white-space: nowrap;

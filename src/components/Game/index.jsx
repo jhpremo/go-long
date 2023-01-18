@@ -30,7 +30,7 @@ const Game = () => {
                 <div className="score-board-wrapper">
                     <div className="score-board-row">
                         <div className="score-board-section">
-                            <label className="score-board-label">Team One</label>
+                            <label className="score-board-label">{gameObj.teamOneName}</label>
                             <div className="score-board-content">{gameObj.teamOneScore}</div>
                         </div>
                         <div className="score-board-section">
@@ -42,7 +42,7 @@ const Game = () => {
                             <div className="score-board-content">{gameObj.drive}</div>
                         </div>
                         <div className="score-board-section">
-                            <label className="score-board-label">Team Two</label>
+                            <label className="score-board-label">{gameObj.teamTwoName}</label>
                             <div className="score-board-content">{gameObj.teamTwoScore}</div>
                         </div>
                     </div>
