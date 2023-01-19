@@ -6,6 +6,7 @@ import Drive from "../Drive"
 import Field from "../Field"
 import KickOff from "../KickOff"
 import OnDowns from "../OnDowns"
+import PostTouchdown from "../PostTouchdown"
 import "./game.css"
 
 const Game = () => {
@@ -70,7 +71,7 @@ const Game = () => {
                     {gameObj.gameAction === "kick-off" && <KickOff />}
                     {gameObj.gameAction === "drive" && <Drive />}
                     {gameObj.gameAction === "post-turnover-on-downs" && <OnDowns />}
-                    {gameObj.gameAction === "post-touchdown" && <h2>Touchdown</h2>}
+                    {gameObj.gameAction === "post-touchdown" && <PostTouchdown />}
                     {gameObj.gameAction === "post-saftey" && <h2>Saftey</h2>}
                 </div>
             </div>

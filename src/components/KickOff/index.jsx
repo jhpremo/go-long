@@ -76,7 +76,7 @@ const KickOff = () => {
                 changes['down'] = 1
             }
             if (gameObj.drive === "-") changes['drive'] = 1
-            else changes['drive'] += 1
+            else changes['drive'] = gameObj.drive + 1
             let payload = { ...gameObj, ...changes }
             dispatch(updateGame(payload))
             setReady("pointer")
@@ -85,10 +85,9 @@ const KickOff = () => {
 
     const handleReady = () => {
         if (ready === "pointer" && faceUp === "TD") {
-            let payload = { ...gameObj, gameAction: "extra-point" }
+            let payload = { ...gameObj, gameAction: "post-touchdown" }
             payload.down = "-"
             payload.toGo = "-"
-            payload.ballOn = "-"
             dispatch(updateGame(payload))
         } else if (ready === "pointer") {
             let payload = { ...gameObj, gameAction: "drive" }
