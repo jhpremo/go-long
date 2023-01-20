@@ -20,10 +20,16 @@ const Drive = () => {
     const [usedGreen2, setUsedGreen2] = useState(false)
     const [usedGreen3, setUsedGreen3] = useState(false)
     const [showFlag, setShowFlag] = useState(false)
-    const [showSack, setShowSack] = useState(false)
     const [flagRolled, setFlagRolled] = useState(false)
     const [flagMessage, setFlagMessage] = useState()
-
+    const [showSack, setShowSack] = useState(false)
+    const [sackRolled, setSackRolled] = useState(false)
+    const [sackMessage, setSackMessage] = useState()
+    const [showTurnover, setShowTurnover] = useState(false)
+    const [turnoverRolled, setTurnoverRolled] = useState(false)
+    const [turnoverMessage, setTurnoverMessage] = useState()
+    const [showPick6, setShowPick6] = useState(false)
+    const [showTurnoverScreen2, setTurnoverSceen2] = useState(false)
     useEffect(() => {
         if (canRoll) {
             setRollButtonColor("#c7f4c7")
@@ -92,6 +98,7 @@ const Drive = () => {
         "11": 5,
         "12": 10,
     }
+
     const resetFirstDown = () => {
         setFaceUpBlue()
         setFaceUpGreen1()
@@ -107,11 +114,16 @@ const Drive = () => {
         setFlagRolled(false)
         setFaceUpRed()
         setFaceUpYellow()
+        setShowTurnover(false)
+        setTurnoverSceen2(false)
+        setTurnoverMessage()
         setFlagMessage()
     }
     const handleRoll = () => {
         if (!canRoll) return
         resetFlag()
+        setSackRolled(false)
+        setSackMessage()
         setCanRoll(false)
         let whiteResult, blueResult, green1Result, green2Result, green3Result
         const roll = () => {
@@ -131,10 +143,19 @@ const Drive = () => {
 
         const finish = (interval) => {
             clearInterval(interval)
-            let changes = {}
-            if (whiteResult === "flag") {
-                setShowFlag(true)
-            }
+            setShowTurnover(true)
+            // if (whiteResult === "flag") {
+            //     setShowFlag(true)
+            // } else if (whiteResult === "sack") {
+            //     setShowSack(true)
+            // } else if (whiteResult === "turnover") {
+            //     if (faceUpBlue === "TD") {
+            //         setUsedBlue(true)
+            //         setShowPick6(true)
+            //     } else {
+            //         setShowTurnover(true)
+            //     }
+            // }
         }
     }
 
@@ -340,6 +361,85 @@ const Drive = () => {
         }
     }
 
+    const handleSackRoll = () => {
+        setSackRolled(true)
+        let yellowResult
+        const rollSack = () => {
+            yellowResult = yellowDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
+            if (yellowResult === "PI") yellowResult = 10
+            if (yellowResult === "offset") yellowResult = 0
+            setFaceUpYellow(yellowResult)
+        }
+
+        let interval = setInterval(rollSack, 200)
+        setTimeout(() => finish(interval), 3000)
+
+        const finish = (interval) => {
+            clearInterval(interval)
+            if (!usedBlue) setFaceUpBlue(-yellowResult)
+            if (!usedGreen1) setFaceUpGreen1(-yellowResult)
+            if (!usedGreen2) setFaceUpGreen2(-yellowResult)
+            if (!usedGreen3) setFaceUpGreen3(-yellowResult)
+            setSackMessage(`Sacked for a loss of ${yellowResult} yards`)
+        }
+    }
+
+    const handlePick6 = () => {
+        let changes = {}
+        if (gameObj.direction === "<--") {
+            changes.direction = "-->"
+            changes.ballOn = 100
+        } else {
+            changes.direction = "<--"
+            changes.ballOn = 0
+        }
+        let payload = { ...gameObj, ...changes }
+        dispatch(updateGame(payload))
+    }
+
+    const handleTurnoverRoll = () => {
+        setTurnoverRolled(true)
+        let redResult
+        const roll = () => {
+            redResult = redDieSides[(Math.floor(Math.random() * (2) + 1))]
+            setFaceUpRed(redResult)
+        }
+
+        let interval = setInterval(roll, 200)
+        setTimeout(() => finish(interval), 3000)
+
+        const finish = (interval) => {
+            clearInterval(interval)
+            if (redResult === "O") {
+                setTurnoverMessage("The offense has recovered the ball")
+            } else {
+                setTurnoverMessage("The defense has recovered the ball")
+            }
+        }
+    }
+
+    const handleTOSelection = (val) => {
+        let changes = {}
+        console.log(val)
+        if (gameObj.direction === "-->") {
+            changes.ballOn = gameObj.ballOn - val
+            changes.direction = "<--"
+        } else {
+            changes.ballOn = gameObj.ballOn + val
+            changes.direction = "-->"
+        }
+        changes.down = 1
+        changes.toGo = 10
+        changes.drive = gameObj.drive + 1
+        console.log(changes)
+        let payload = { ...gameObj, ...changes }
+        dispatch(updateGame(payload))
+        setShowTurnover(false)
+        setTurnoverSceen2(false)
+        setTurnoverMessage()
+        resetFirstDown()
+        setCanRoll(true)
+    }
     return (
         <div className="drive-wrapper">
             {gameObj.direction === "-->" && <h2 className="drive-header">{gameObj.teamOneName} Drive</h2>}
@@ -366,6 +466,68 @@ const Drive = () => {
                         </div>
                     </div>
                     {!!flagMessage && <div className="post-td-message">{flagMessage}, roll to continue</div>}
+                </div>}
+                {showSack && <div className="flag-wrapper">
+                    <h3>The QB has been sacked! Roll for yards lost</h3>
+                    <div className="dice-wrapper" id="flag-dice-wrapper">
+                        {!sackRolled && <div className="option-wrapper">
+                            <button onClick={handleSackRoll} className="roll-flag">Roll Sack</button>
+                        </div>}
+                        {sackRolled && <div className="option-wrapper">
+                            <button className="roll-flag" style={{ backgroundColor: "#f5c7c7" }}>Roll Sack</button>
+                        </div>}
+                        <div className="option-wrapper" id="flag-die">
+                            <div className="yellow-die">
+                                <div className="kick-die-text">{faceUpYellow}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {!!sackMessage && <div className="post-td-message">{sackMessage} <button onClick={() => setShowSack(false)} className="drive-button">continue</button></div>}
+                </div>}
+                {showPick6 && <div className="pick6-wrapper">
+                    <h3>Pick Six!</h3>
+                    <button className="drive-button" onClick={handlePick6} >continue</button>
+                </div>}
+                {showTurnover && <div className="flag-wrapper">
+                    {!showTurnoverScreen2 && <><h3>Potential turnover! Roll for possession</h3>
+                        <div className="dice-wrapper" id="flag-dice-wrapper">
+                            {!turnoverRolled && <div className="option-wrapper">
+                                <button onClick={handleTurnoverRoll} className="roll-flag">Roll TO</button>
+                            </div>}
+                            {turnoverRolled && <div className="option-wrapper">
+                                <button className="roll-flag" style={{ backgroundColor: "#f5c7c7" }}>Roll TO</button>
+                            </div>}
+                            <div className="option-wrapper" id="flag-die">
+                                <div className="red-die"><div className="kick-die-text">{faceUpRed}</div></div>
+                            </div>
+                        </div>
+                        {!!turnoverMessage && <div className="post-td-message">{turnoverMessage} <button className="drive-button" onClick={() => {
+                            setTurnoverRolled(false)
+                            if (faceUpRed === "O") {
+                                setShowTurnover(false)
+                            } else setTurnoverSceen2(true)
+                        }} >continue</button></div>}</>}
+                    {showTurnoverScreen2 && <>
+                        <h3>Defense select one play die</h3>
+                        <div className="dice-wrapper">
+                            {!usedBlue && <div className="option-wrapper">
+                                <div className="blue-die"><div className="kick-die-text">{faceUpBlue}</div></div>
+                                <button className="drive-button" onClick={() => { handleTOSelection(faceUpBlue) }}>Select</button>
+                            </div>}
+                            {!usedGreen1 && <div className="option-wrapper">
+                                <div className="green-die"><div className="kick-die-text">{faceUpGreen1}</div></div>
+                                <button onClick={() => { handleTOSelection(faceUpGreen1) }} className="drive-button">Select</button>
+                            </div>}
+                            {!usedGreen2 && <div className="option-wrapper">
+                                <div className="green-die"><div className="kick-die-text">{faceUpGreen2}</div></div>
+                                <button onClick={() => { handleTOSelection(faceUpGreen2) }} className="drive-button">Select</button>
+                            </div>}
+                            {!usedGreen3 && <div className="option-wrapper">
+                                <div className="green-die"><div className="kick-die-text">{faceUpGreen3}</div></div>
+                                <button onClick={() => { handleTOSelection(faceUpGreen3) }} className="drive-button">Select</button>
+                            </div>}
+                        </div>
+                    </>}
                 </div>}
                 <div className="option-wrapper">
                     <div className="white-die">
