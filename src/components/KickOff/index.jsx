@@ -1,5 +1,5 @@
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { updateGame } from "../../store/gameReducer"
 import "./kick-off.css"
@@ -12,6 +12,16 @@ const KickOff = () => {
     const [ready, setReady] = useState("default")
     const [circle, setCircle] = useState("n/a")
     const [message, setMessage] = useState("")
+    const [rollButtonColor, setRollButtonColor] = useState("#c7f4c7")
+
+    useEffect(() => {
+        if (!rolled) {
+            setRollButtonColor("#c7f4c7")
+        } else {
+            setRollButtonColor("#f5c7c7")
+        }
+    }, [rolled])
+
     let kickDieSides = {
         "1": "X",
         "2": 20,
@@ -99,7 +109,12 @@ const KickOff = () => {
         <div onClick={handleReady} className="kick-off-wrapper" style={{ cursor: ready }}>
             {gameObj.direction === "-->" && <h2>{gameObj.teamOneName} will roll for kick return</h2>}
             {gameObj.direction === "<--" && <h2>{gameObj.teamTwoName} will roll for kick return</h2>}
-            <div className="kick-die" onClick={rollDie}><div className="kick-die-text" id={circle}>{faceUp}</div></div>
+            <div className="two-point-dice-wrapper">
+                <div className="option-wrapper">
+                    <button onClick={rollDie} className="roll-button" style={{ backgroundColor: rollButtonColor }}>Roll</button>
+                </div>
+                <div className="kick-die" onClick={rollDie}><div className="kick-die-text" id={circle}>{faceUp}</div></div>
+            </div>
             {<div className="message">{message}</div>}
         </div>
     )

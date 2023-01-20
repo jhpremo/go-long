@@ -10,7 +10,7 @@
 
 .drive-header {
     margin: 0px;
-    font-size: 1.8vw;
+    font-size: 1.4vw;
     position: absolute;
     top: 0px;
 }
@@ -21,6 +21,7 @@
     gap: 10px;
     width: 100%;
     justify-content: space-around;
+    position: relative;
 }
 
 .option-wrapper {
@@ -72,6 +73,41 @@
     margin-bottom: 20px;
 }
 
+.red-die {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background-color: rgb(224, 5, 5);
+    display: inline-block;
+    color: white;
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-size: 2.5vw;
+    margin-bottom: 20px;
+}
+
+.yellow-die {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background-color: rgb(231, 219, 0);
+    display: inline-block;
+    color: black;
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-size: 2.5vw;
+    margin-bottom: 20px;
+}
+
+.yellow-die-icons {
+    color: black;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
 /* .re-roll {
     width: 100%;
     aspect-ratio: 1/1;
@@ -90,6 +126,21 @@
     background-color: hwb(120 78% 4%);
     box-shadow: 0px 4px 10px gray;
     cursor: pointer;
+}
+
+.roll-flag {
+    width: 100%;
+    aspect-ratio: 1/1;
+    font-size: 1.4vw;
+    border-radius: 20px;
+    border: none;
+    background-color: hwb(120 78% 4%);
+    box-shadow: 0px 4px 10px gray;
+    cursor: pointer;
+}
+
+.roll-flag:hover {
+    box-shadow: 0px 6px 10px gray;
 }
 
 .roll-button:hover {
@@ -141,4 +192,28 @@
 .drive-button:hover {
     background-color: rgb(243, 243, 243);
     box-shadow: 0px 4px 3px gray;
+}
+
+.flag-wrapper {
+    position: absolute;
+    width: 80%;
+    height: 100%;
+    right: 0px;
+    z-index: 10;
+    background-color: lightgray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flag-wrapper>h3 {
+    margin: 0px;
+    font-size: 1.5vw;
+    font-weight: normal;
+}
+
+#flag-dice-wrapper {
+    justify-content: center;
+    align-items: center;
+    gap: 10%;
 }

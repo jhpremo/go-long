@@ -7,6 +7,8 @@ const Drive = () => {
     const gameObj = useSelector((state) => state.game)
     const dispatch = useDispatch()
     const [faceUpWhite, setFaceUpWhite] = useState("ball")
+    const [faceUpRed, setFaceUpRed] = useState()
+    const [faceUpYellow, setFaceUpYellow] = useState()
     const [faceUpBlue, setFaceUpBlue] = useState()
     const [faceUpGreen1, setFaceUpGreen1] = useState()
     const [faceUpGreen2, setFaceUpGreen2] = useState()
@@ -17,6 +19,10 @@ const Drive = () => {
     const [usedGreen1, setUsedGreen1] = useState(false)
     const [usedGreen2, setUsedGreen2] = useState(false)
     const [usedGreen3, setUsedGreen3] = useState(false)
+    const [showFlag, setShowFlag] = useState(false)
+    const [showSack, setShowSack] = useState(false)
+    const [flagRolled, setFlagRolled] = useState(false)
+    const [flagMessage, setFlagMessage] = useState()
 
     useEffect(() => {
         if (canRoll) {
@@ -68,7 +74,24 @@ const Drive = () => {
         "11": "sack",
         "12": "turnover",
     }
-
+    const redDieSides = {
+        "1": "O",
+        "2": "D"
+    }
+    let yellowDieSides = {
+        "1": "offset",
+        "2": 5,
+        "3": 10,
+        "4": 15,
+        "5": 5,
+        "6": 10,
+        "7": "PI",
+        "8": 5,
+        "9": 5,
+        "10": 15,
+        "11": 5,
+        "12": 10,
+    }
     const resetFirstDown = () => {
         setFaceUpBlue()
         setFaceUpGreen1()
@@ -79,15 +102,24 @@ const Drive = () => {
         setUsedGreen2(false)
         setUsedGreen3(false)
     }
+    const resetFlag = () => {
+        setShowFlag(false)
+        setFlagRolled(false)
+        setFaceUpRed()
+        setFaceUpYellow()
+        setFlagMessage()
+    }
     const handleRoll = () => {
         if (!canRoll) return
+        resetFlag()
         setCanRoll(false)
+        let whiteResult, blueResult, green1Result, green2Result, green3Result
         const roll = () => {
-            const whiteResult = whiteDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
-            const blueResult = blueDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
-            const green1Result = greenDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
-            const green2Result = greenDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
-            const green3Result = greenDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
+            whiteResult = whiteDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
+            blueResult = blueDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
+            green1Result = greenDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
+            green2Result = greenDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
+            green3Result = greenDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
             setFaceUpWhite(whiteResult)
             if (!usedBlue) setFaceUpBlue(blueResult)
             if (!usedGreen1) setFaceUpGreen1(green1Result)
@@ -95,14 +127,13 @@ const Drive = () => {
             if (!usedGreen3) setFaceUpGreen3(green3Result)
         }
         let interval = setInterval(roll, 200)
-        setTimeout(() => finish(), 3000)
+        setTimeout(() => finish(interval), 3000)
 
-        const finish = () => {
+        const finish = (interval) => {
             clearInterval(interval)
-            // let changes = {}
-
-            if (faceUpWhite === "ball") {
-
+            let changes = {}
+            if (whiteResult === "flag") {
+                setShowFlag(true)
             }
         }
     }
@@ -231,12 +262,111 @@ const Drive = () => {
         dispatch(updateGame(payload))
     }
 
+    const handleFlagRoll = () => {
+        setFlagRolled(true)
+        let redResult, yellowResult
+        const roll = () => {
+            yellowResult = yellowDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
+            redResult = redDieSides[(Math.floor(Math.random() * (2) + 1))]
+            setFaceUpRed(redResult)
+            setFaceUpYellow(yellowResult)
+        }
+
+        let interval = setInterval(roll, 200)
+        setTimeout(() => finish(interval), 3000)
+
+        const finish = (interval) => {
+            clearInterval(interval)
+            let changes = {}
+            if (redResult === "O") {
+                if (yellowResult === "PI") {
+                    setFlagMessage("Pass Interferance on the Offense 10 yard penalty")
+                    if (gameObj.direction === "<--") {
+                        changes.ballOn = gameObj.ballOn + 10
+                    } else {
+                        changes.ballOn = gameObj.ballOn - 10
+                    }
+                    changes.toGo = gameObj.toGo + 10
+                } else if (yellowResult === "offset") {
+                    setFlagMessage("Offsetting penalties replay the down")
+                } else {
+                    setFlagMessage(`${yellowResult} yard penalty on the offense`)
+                    if (gameObj.direction === "<--") {
+                        changes.ballOn = gameObj.ballOn + yellowResult
+                    } else {
+                        changes.ballOn = gameObj.ballOn - yellowResult
+                    }
+                    changes.toGo = gameObj.toGo + yellowResult
+                }
+            } else {
+                if (yellowResult === "PI") {
+                    let PI = 10
+                    if (faceUpBlue !== "TD" && faceUpBlue > PI && !usedBlue) PI = faceUpBlue
+                    setFlagMessage(`Pass interferance on the defense ${PI} yard penalty, first down`)
+                    if (gameObj.direction === "<--") {
+                        changes.ballOn = gameObj.ballOn - PI
+                    } else {
+                        changes.ballOn = gameObj.ballOn + PI
+                    }
+                    changes.toGo = gameObj.toGo - PI
+                    changes.down = 1
+                    resetFirstDown()
+                } else if (yellowResult === "offset") {
+                    setFlagMessage("Offsetting penalties replay the down")
+                } else {
+                    setFlagMessage(`${yellowResult} yard penalty on the defense`)
+                    if (gameObj.direction === "<--") {
+                        changes.ballOn = gameObj.ballOn - yellowResult
+                    } else {
+                        changes.ballOn = gameObj.ballOn + yellowResult
+                    }
+                    changes.toGo = gameObj.toGo - yellowResult
+                }
+            }
+            if (changes.ballOn >= 100) {
+                let diff = changes.ballOn - 100
+                if (changes.toGo) changes.toGo -= diff
+                changes.ballOn = 99
+            }
+
+            if (changes.ballOn <= 0) {
+                let diff = 1 - changes.ballOn
+                if (changes.toGo) changes.toGo -= diff
+                changes.ballOn = 1
+            }
+            let payload = { ...gameObj, ...changes }
+            dispatch(updateGame(payload))
+            setCanRoll(true)
+        }
+    }
 
     return (
         <div className="drive-wrapper">
             {gameObj.direction === "-->" && <h2 className="drive-header">{gameObj.teamOneName} Drive</h2>}
             {gameObj.direction === "<--" && <h2 className="drive-header">{gameObj.teamTwoName} Drive</h2>}
             <div className="dice-wrapper">
+                {showFlag && <div className="flag-wrapper">
+                    <h3>Flag on the play, roll for penalized team and yardage</h3>
+                    <div className="dice-wrapper" id="flag-dice-wrapper">
+                        {!flagRolled && <div className="option-wrapper">
+                            <button onClick={handleFlagRoll} className="roll-flag">Roll Flag</button>
+                        </div>}
+                        {flagRolled && <div className="option-wrapper">
+                            <button className="roll-flag" style={{ backgroundColor: "#f5c7c7" }}>Roll Flag</button>
+                        </div>}
+                        <div className="option-wrapper" id="flag-die">
+                            <div className="red-die"><div className="kick-die-text">{faceUpRed}</div></div>
+                        </div>
+                        <div className="option-wrapper" id="flag-die">
+                            <div className="yellow-die">
+                                {faceUpYellow === "offset" && <div className="yellow-die-icons"><i className="fa-solid fa-arrows-left-right" /></div>}
+                                {faceUpYellow === "PI" && <div className="yellow-die-icons"><i className="fa-solid fa-hand" /></div>}
+                                {faceUpYellow !== "offset" && faceUpYellow !== "PI" && <div className="kick-die-text">{faceUpYellow}</div>}
+                            </div>
+                        </div>
+                    </div>
+                    {!!flagMessage && <div className="post-td-message">{flagMessage}, roll to continue</div>}
+                </div>}
                 <div className="option-wrapper">
                     <div className="white-die">
                         {faceUpWhite === "ball" && <div className="white-die-ball"></div>}
@@ -244,7 +374,7 @@ const Drive = () => {
                         {faceUpWhite === "sack" && <div className="white-die-sack"><i className="fa-solid fa-ban" /></div>}
                         {faceUpWhite === "turnover" && <div className="white-die-sack"><i className="fa-solid fa-asterisk" /></div>}
                     </div>
-                    <button onClick={handleRoll} className="roll-button" style={{ backgroundColor: rollButtonColor }}>Roll</button>
+                    {<button onClick={handleRoll} className="roll-button" style={{ backgroundColor: rollButtonColor }}>Roll</button>}
 
                 </div>
                 <div className="option-wrapper">
@@ -268,7 +398,7 @@ const Drive = () => {
                 <button className="drive-button" style={{ backgroundColor: rollButtonColor }}>Punt</button>
                 <button className="drive-button" style={{ backgroundColor: rollButtonColor }}>Field Goal</button>
             </div>
-        </div>
+        </div >
     )
 }
 
