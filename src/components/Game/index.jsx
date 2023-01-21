@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import CoinFlip from "../CoinFlip"
 import Drive from "../Drive"
 import Field from "../Field"
+import FieldGoal from "../FieldGoal/FieldGoal"
 import KickOff from "../KickOff"
 import OnDowns from "../OnDowns"
 import PostTouchdown from "../PostTouchdown"
@@ -72,6 +73,7 @@ const Game = () => {
                     {gameObj.gameAction === "drive" && <Drive />}
                     {gameObj.gameAction === "post-turnover-on-downs" && <OnDowns />}
                     {gameObj.gameAction === "post-touchdown" && <PostTouchdown />}
+                    {gameObj.gameAction === "field-goal" && <FieldGoal />}
                     {gameObj.gameAction === "post-saftey" && <h2>Saftey</h2>}
                 </div>
             </div>

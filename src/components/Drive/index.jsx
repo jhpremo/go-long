@@ -143,19 +143,19 @@ const Drive = () => {
 
         const finish = (interval) => {
             clearInterval(interval)
-            setShowTurnover(true)
-            // if (whiteResult === "flag") {
-            //     setShowFlag(true)
-            // } else if (whiteResult === "sack") {
-            //     setShowSack(true)
-            // } else if (whiteResult === "turnover") {
-            //     if (faceUpBlue === "TD") {
-            //         setUsedBlue(true)
-            //         setShowPick6(true)
-            //     } else {
-            //         setShowTurnover(true)
-            //     }
-            // }
+
+            if (whiteResult === "flag") {
+                setShowFlag(true)
+            } else if (whiteResult === "sack") {
+                setShowSack(true)
+            } else if (whiteResult === "turnover") {
+                if (blueResult === "TD") {
+                    setUsedBlue(true)
+                    setShowPick6(true)
+                } else {
+                    setShowTurnover(true)
+                }
+            }
         }
     }
 
@@ -557,8 +557,16 @@ const Drive = () => {
                 </div>
             </div>
             <div className="punt-fg-wrapper">
-                <button className="drive-button" style={{ backgroundColor: rollButtonColor }}>Punt</button>
-                <button className="drive-button" style={{ backgroundColor: rollButtonColor }}>Field Goal</button>
+                <button onClick={() => {
+                    let payload = { ...gameObj }
+                    payload.gameAction = "punt"
+                    dispatch(updateGame(payload))
+                }} className="drive-button" style={{ backgroundColor: rollButtonColor }}>Punt</button>
+                <button onClick={() => {
+                    let payload = { ...gameObj }
+                    payload.gameAction = "field-goal"
+                    dispatch(updateGame(payload))
+                }} className="drive-button" style={{ backgroundColor: rollButtonColor }}>Field Goal</button>
             </div>
         </div >
     )
