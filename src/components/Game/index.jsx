@@ -8,6 +8,7 @@ import FieldGoal from "../FieldGoal/FieldGoal"
 import KickOff from "../KickOff"
 import OnDowns from "../OnDowns"
 import PostTouchdown from "../PostTouchdown"
+import Punt from "../Punt/Punt"
 import "./game.css"
 
 const Game = () => {
@@ -74,6 +75,7 @@ const Game = () => {
                     {gameObj.gameAction === "post-turnover-on-downs" && <OnDowns />}
                     {gameObj.gameAction === "post-touchdown" && <PostTouchdown />}
                     {gameObj.gameAction === "field-goal" && <FieldGoal />}
+                    {gameObj.gameAction === "punt" && <Punt />}
                     {gameObj.gameAction === "post-saftey" && <h2>Saftey</h2>}
                 </div>
             </div>

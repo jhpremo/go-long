@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { updateGame } from "../../store/gameReducer"
-import "./field-goal.css"
 
-const FieldGoal = () => {
+
+const Punt = () => {
     const dispatch = useDispatch()
     const gameObj = useSelector((state) => state.game)
     const [faceUp, setFaceUp] = useState("20")
@@ -29,7 +29,7 @@ const FieldGoal = () => {
         "4": 45,
         "5": 10,
         "6": 30,
-        "7": "FG",
+        "7": "TB",
         "8": 55,
         "9": 40,
         "10": 25,
@@ -42,7 +42,7 @@ const FieldGoal = () => {
         let result
         const roll = () => {
             result = kickDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
-            if (result === "X" || result === "FG") setCircle("circle")
+            if (result === "X" || result === "TB") setCircle("circle")
             else setCircle("n/a")
             setFaceUp(result)
         }
@@ -53,58 +53,36 @@ const FieldGoal = () => {
             clearInterval(interval)
             let changes = {}
             if (result === "X") {
+                setMessage(`Punt is blocked! defense take over at line of scrimmage`)
+            } else if (result === "TB") {
+                setMessage("Touchback, drive will start on the 20")
                 if (gameObj.direction === "-->") {
-                    setMessage(`Kick is blocked! defense take over at line of scrimmage`)
-                } else if (gameObj.direction === "<--") {
-                    setMessage(`Kick is blocked! defense take over at line of scrimmage`)
-                }
-                setNextAction("drive")
-                changes['down'] = 1
-                changes['toGo'] = 10
-            } else if (result === "FG") {
-                if (gameObj.direction === "-->") {
-                    changes.teamOneScore = gameObj.teamOneScore + 3
+                    changes.ballOn = 80
                 } else {
-                    changes.teamOneScore = gameObj.teamTwoScore + 3
+                    changes.ballOn = 20
                 }
-                setMessage(`Perfect Kick!`)
-                setNextAction("kick-off")
-                changes['ballOn'] = "-"
-                changes['toGo'] = "-"
-                changes['down'] = "-"
             } else {
                 if (gameObj.direction === "-->") {
                     if (result >= (100 - gameObj.ballOn)) {
-                        setMessage("Kick is good!")
-                        changes.teamOneScore = gameObj.teamOneScore + 3
-                        setNextAction("kick-off")
-                        changes['ballOn'] = "-"
-                        changes['toGo'] = "-"
-                        changes['down'] = "-"
+                        setMessage("Touchback, drive will start on the 20")
+                        changes.ballOn = 80
                     } else {
-                        setMessage("Kick is short, defense take over at line of scrimmage")
-                        setNextAction("drive")
-                        changes['down'] = 1
-                        changes['toGo'] = 10
+                        setMessage(`${result} yard punt!`)
+                        changes.ballOn = gameObj.ballOn + result
                     }
                 } else {
                     if (result >= gameObj.ballOn) {
-                        setMessage("Kick is good!")
-                        changes.teamTwoScore = gameObj.teamTwoScore + 3
-                        setNextAction("kick-off")
-                        changes['ballOn'] = "-"
-                        changes['toGo'] = "-"
-                        changes['down'] = "-"
+                        setMessage("Touchback, drive will start on the 20")
+                        changes.ballOn = 20
                     } else {
-                        setMessage("Kick is short, defense take over at line of scrimmage")
-                        setNextAction("drive")
-                        changes['down'] = 1
-                        changes['toGo'] = 10
+                        setMessage(`${result} yard punt!`)
+                        changes.ballOn = gameObj.ballOn - result
                     }
                 }
             }
-
-            if (nextAction === "drive") changes['drive'] = gameObj.drive + 1
+            changes['down'] = 1
+            changes['toGo'] = "-"
+            changes['drive'] = gameObj.drive + 1
             let payload = { ...gameObj, ...changes }
             dispatch(updateGame(payload))
             setReady("pointer")
@@ -113,7 +91,7 @@ const FieldGoal = () => {
 
     const handleReady = () => {
         if (ready === "pointer") {
-            let payload = { ...gameObj, gameAction: nextAction }
+            let payload = { ...gameObj, gameAction: "drive", toGo: 10 }
             if (gameObj.direction === "-->") payload.direction = "<--"
             else payload.direction = "-->"
             dispatch(updateGame(payload))
@@ -121,8 +99,8 @@ const FieldGoal = () => {
     }
     return (
         <div onClick={handleReady} className="kick-off-wrapper" style={{ cursor: ready }}>
-            {gameObj.direction === "-->" && <h2>{gameObj.teamOneName} Field Goal Attempt</h2>}
-            {gameObj.direction === "<--" && <h2>{gameObj.teamTwoName} Field Goal Attempt</h2>}
+            {gameObj.direction === "-->" && <h2>{gameObj.teamOneName} Punt</h2>}
+            {gameObj.direction === "<--" && <h2>{gameObj.teamTwoName} Punt</h2>}
             <div className="two-point-dice-wrapper">
                 <div className="option-wrapper">
                     <button onClick={rollDie} className="roll-button" style={{ backgroundColor: rollButtonColor }}>Roll</button>
@@ -134,4 +112,4 @@ const FieldGoal = () => {
     )
 }
 
-export default FieldGoal
+export default Punt
