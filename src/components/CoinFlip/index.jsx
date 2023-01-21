@@ -35,17 +35,17 @@ const CoinFlip = () => {
         const finish = () => {
             clearInterval(interval)
             let direction
-            let startingTeam
+            let secondHalf
             if (result) {
                 setMessage(`${gameObj.teamTwoName} will recieve the Kick Off, click to continue`)
                 direction = "<--"
-                startingTeam = 2
+                secondHalf = "-->"
             } else {
                 setMessage(`${gameObj.teamOneName} will recieve the Kick Off, click to continue`)
                 direction = "-->"
-                startingTeam = 1
+                secondHalf = "<--"
             }
-            let payload = { ...gameObj, direction, startingTeam }
+            let payload = { ...gameObj, direction, secondHalf }
             dispatch(updateGame(payload))
             setReady("pointer")
         }

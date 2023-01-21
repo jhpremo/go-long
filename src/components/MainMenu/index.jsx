@@ -38,7 +38,7 @@ const MainMenu = () => {
             teamTwoName,
             teamTwoPrimaryColor,
             teamTwoSecondaryColor,
-            totalPossessions,
+            totalPossessions: Number(totalPossessions),
             gameAction: "coin-flip",
             teamOneScore: 0,
             teamTwoScore: 0,
@@ -46,7 +46,7 @@ const MainMenu = () => {
             down: "-",
             toGo: "-",
             ballOn: "-",
-            direction: "-->",
+            direction: "-",
             drive: "-"
         }
         dispatch(updateGame(payload))

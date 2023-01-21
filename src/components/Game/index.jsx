@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { updateGame } from "../../store/gameReducer"
 import CoinFlip from "../CoinFlip"
 import Drive from "../Drive"
 import Field from "../Field"
@@ -13,9 +14,37 @@ import Punt from "../Punt/Punt"
 import "./game.css"
 
 const Game = () => {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const gameObj = useSelector((state) => state.game)
     const [ballOn, setBallOn] = useState("-")
+
+
+    useEffect(() => {
+        let changes = {}
+        if (gameObj.quarter === "OT") {
+            if (changes.drive % 2 === 0 && (gameObj.teamOneScore !== gameObj.teamTwoScore)) {
+                changes.gameAction = "end-time"
+            }
+        }
+        else if (gameObj.drive === (gameObj.totalPossessions + 1)) {
+            changes.quarter = 2
+        } else if (gameObj.drive === 2 * gameObj.totalPossessions + 1) {
+            changes.gameAction = "half-time"
+        } else if (gameObj.drive === 3 * gameObj.totalPossessions + 1) {
+            changes.quarter = 4
+        } else if (gameObj.drive === 4 * gameObj.totalPossessions + 1) {
+            if (gameObj.teamOneScore !== gameObj.teamTwoScore) changes.gameAction = "full-time"
+            else {
+                changes.gameAction = "over-time"
+                changes.quarter = "OT"
+                changes.drive = "-"
+            }
+        }
+        console.log(gameObj, changes)
+        let payload = { ...gameObj, ...changes }
+        dispatch(updateGame(payload))
+    }, [gameObj.drive, gameObj.gameAction])
 
     useEffect(() => {
         if (!gameObj?.teamOnePrimaryColor) navigate("/")
