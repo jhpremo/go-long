@@ -29,7 +29,7 @@ const Game = () => {
         }
         else if (gameObj.drive === (gameObj.totalPossessions + 1)) {
             changes.quarter = 2
-        } else if (gameObj.drive === 2 * gameObj.totalPossessions + 1) {
+        } else if (gameObj.drive === 2 * gameObj.totalPossessions + 1 && gameObj.quarter === 2) {
             changes.gameAction = "half-time"
         } else if (gameObj.drive === 3 * gameObj.totalPossessions + 1) {
             changes.quarter = 4
@@ -107,6 +107,40 @@ const Game = () => {
                     {gameObj.gameAction === "field-goal" && <FieldGoal />}
                     {gameObj.gameAction === "punt" && <Punt />}
                     {gameObj.gameAction === "post-saftey" && <PostSaftey />}
+                    {gameObj.gameAction === "full-time" && <div className="on-downs-wrapper">
+                        <h2>Final Score</h2>
+                        <div className="score-board-row">
+                            <div className="score-board-section" >
+                                <label className="score-board-label" style={{ color: "black" }}>{gameObj.teamOneName}</label>
+                                <div className="score-board-content">{gameObj.teamOneScore}</div>
+                            </div>
+                            <div className="score-board-section" >
+                                <label className="score-board-label" style={{ color: "black" }}>{gameObj.teamTwoName}</label>
+                                <div className="score-board-content">{gameObj.teamTwoScore}</div>
+                            </div>
+                        </div>
+                    </div>}
+                    {gameObj.gameAction === "half-time" && <div onClick={() => {
+                        let payload = { ...gameObj }
+                        payload.quarter = 3
+                        payload.drive = gameObj.drive - 1
+                        payload.direction = gameObj.secondHalf
+                        payload.gameAction = "kick-off"
+                        dispatch(updateGame(payload))
+                    }} className="on-downs-wrapper">
+                        <h2>Half Time!</h2>
+                        <div className="score-board-row">
+                            <div className="score-board-section" >
+                                <label className="score-board-label" style={{ color: "black" }}>{gameObj.teamOneName}</label>
+                                <div className="score-board-content">{gameObj.teamOneScore}</div>
+                            </div>
+                            <div className="score-board-section" >
+                                <label className="score-board-label" style={{ color: "black" }}>{gameObj.teamTwoName}</label>
+                                <div className="score-board-content">{gameObj.teamTwoScore}</div>
+                            </div>
+                        </div>
+                        <h2>click to continue</h2>
+                    </div>}
                 </div>
             </div>
             <div className="game-bottom-wrapper">
