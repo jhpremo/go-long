@@ -7,6 +7,7 @@ import Field from "../Field"
 import FieldGoal from "../FieldGoal/FieldGoal"
 import KickOff from "../KickOff"
 import OnDowns from "../OnDowns"
+import PostSaftey from "../PostSaftey"
 import PostTouchdown from "../PostTouchdown"
 import Punt from "../Punt/Punt"
 import "./game.css"
@@ -76,7 +77,7 @@ const Game = () => {
                     {gameObj.gameAction === "post-touchdown" && <PostTouchdown />}
                     {gameObj.gameAction === "field-goal" && <FieldGoal />}
                     {gameObj.gameAction === "punt" && <Punt />}
-                    {gameObj.gameAction === "post-saftey" && <h2>Saftey</h2>}
+                    {gameObj.gameAction === "post-saftey" && <PostSaftey />}
                 </div>
             </div>
             <div className="game-bottom-wrapper">

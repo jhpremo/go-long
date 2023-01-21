@@ -143,19 +143,19 @@ const Drive = () => {
 
         const finish = (interval) => {
             clearInterval(interval)
-
-            if (whiteResult === "flag") {
-                setShowFlag(true)
-            } else if (whiteResult === "sack") {
-                setShowSack(true)
-            } else if (whiteResult === "turnover") {
-                if (blueResult === "TD") {
-                    setUsedBlue(true)
-                    setShowPick6(true)
-                } else {
-                    setShowTurnover(true)
-                }
-            }
+            setShowSack(true)
+            // if (whiteResult === "flag") {
+            //     setShowFlag(true)
+            // } else if (whiteResult === "sack") {
+            //     setShowSack(true)
+            // } else if (whiteResult === "turnover") {
+            //     if (blueResult === "TD") {
+            //         setUsedBlue(true)
+            //         setShowPick6(true)
+            //     } else {
+            //         setShowTurnover(true)
+            //     }
+            // }
         }
     }
 
@@ -176,7 +176,6 @@ const Drive = () => {
                 changes.ballOn = 0
                 changes.gameAction = "post-touchdown"
             } else {
-                changes['teamOneScore'] = gameObj.teamTwoScore + 2
                 changes.ballOn = 0
                 changes.gameAction = "post-saftey"
             }
@@ -188,7 +187,6 @@ const Drive = () => {
                 changes.ballOn = 100
                 changes.gameAction = "post-touchdown"
             } else {
-                changes['teamTwoScore'] = gameObj.teamTwoScore + 2
                 changes.ballOn = 100
                 changes.gameAction = "post-saftey"
             }

@@ -12,9 +12,14 @@ const OnDowns = () => {
         changes.down = 1
         changes.drive = gameObj.drive + 1
         changes.gameAction = "drive"
-        if (gameObj.direction === "-->") changes.direction = "<--"
-        else changes.direction = "-->"
-
+        if (gameObj.direction === "-->") {
+            changes.direction = "<--"
+            if (gameObj.ballOn <= 10) changes.toGo = "-"
+        }
+        else {
+            changes.direction = "-->"
+            if (gameObj.ballOn >= 90) changes.toGo = "-"
+        }
         let payload = { ...gameObj, ...changes }
         dispatch(updateGame(payload))
     }
