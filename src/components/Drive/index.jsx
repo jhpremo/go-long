@@ -143,19 +143,18 @@ const Drive = () => {
 
         const finish = (interval) => {
             clearInterval(interval)
-            setShowSack(true)
-            // if (whiteResult === "flag") {
-            //     setShowFlag(true)
-            // } else if (whiteResult === "sack") {
-            //     setShowSack(true)
-            // } else if (whiteResult === "turnover") {
-            //     if (blueResult === "TD") {
-            //         setUsedBlue(true)
-            //         setShowPick6(true)
-            //     } else {
-            //         setShowTurnover(true)
-            //     }
-            // }
+            if (whiteResult === "flag") {
+                setShowFlag(true)
+            } else if (whiteResult === "sack") {
+                setShowSack(true)
+            } else if (whiteResult === "turnover") {
+                if (blueResult === "TD") {
+                    setUsedBlue(true)
+                    setShowPick6(true)
+                } else {
+                    setShowTurnover(true)
+                }
+            }
         }
     }
 
@@ -183,7 +182,7 @@ const Drive = () => {
             changes.down = "-"
         } else if (gameObj.ballOn >= 100) {
             if (gameObj.direction === "-->") {
-                changes['teamOneScore'] = gameObj.teamTwoScore + 6
+                changes['teamOneScore'] = gameObj.teamOneScore + 6
                 changes.ballOn = 100
                 changes.gameAction = "post-touchdown"
             } else {
@@ -195,6 +194,7 @@ const Drive = () => {
         } else if (gameObj.down === 4 && usedBlue && usedGreen1 && usedGreen2 && usedGreen3 && !changes.down) {
             changes.gameAction = "post-turnover-on-downs"
         }
+        console.log(gameObj, changes)
         let payload = { ...gameObj, ...changes }
         dispatch(updateGame(payload))
     }, [gameObj.ballOn, gameObj.toGo, gameObj.down, usedBlue, usedGreen1, usedGreen2, usedGreen3])
