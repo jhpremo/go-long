@@ -98,7 +98,7 @@
 .football {
     box-sizing: border-box;
     position: absolute;
-    background-image: url("../../../public/football.png");
+    background-image: url("../../../public/football.jpg");
     background-size: contain;
     width: 5%;
     aspect-ratio: 1/1;
