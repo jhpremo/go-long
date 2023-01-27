@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import nextDrive from "../../nextDrive"
 import { updateGame } from "../../store/gameReducer"
 import "./coin-flip.css"
 
@@ -53,8 +54,9 @@ const CoinFlip = () => {
 
     const handleReady = () => {
         if (ready === "pointer") {
-            let payload = { ...gameObj, gameAction: "kick-off" }
-            dispatch(updateGame(payload))
+            let changes = nextDrive(gameObj)
+            changes.gameAction = "kick-off"
+            dispatch(updateGame({ ...gameObj, ...changes }))
         }
     }
     return (

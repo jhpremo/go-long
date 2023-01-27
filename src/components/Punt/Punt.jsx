@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import nextDrive from "../../nextDrive"
 import { updateGame } from "../../store/gameReducer"
 
 
@@ -82,7 +83,6 @@ const Punt = () => {
             }
             changes['down'] = 1
             changes['toGo'] = "-"
-            changes['drive'] = gameObj.drive + 1
             let payload = { ...gameObj, ...changes }
             dispatch(updateGame(payload))
             setReady("pointer")
@@ -94,7 +94,8 @@ const Punt = () => {
             let payload = { ...gameObj, gameAction: "drive", toGo: 10 }
             if (gameObj.direction === "-->") payload.direction = "<--"
             else payload.direction = "-->"
-            dispatch(updateGame(payload))
+            let driveChanges = nextDrive(gameObj)
+            dispatch(updateGame({ ...payload, ...driveChanges }))
         }
     }
     return (

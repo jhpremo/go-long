@@ -20,31 +20,31 @@ const Game = () => {
     const [ballOn, setBallOn] = useState("-")
 
 
-    useEffect(() => {
-        let changes = {}
-        if (gameObj.quarter === "OT") {
-            if (changes.drive % 2 === 0 && (gameObj.teamOneScore !== gameObj.teamTwoScore)) {
-                changes.gameAction = "end-time"
-            }
-        }
-        else if (gameObj.drive === (gameObj.totalPossessions + 1)) {
-            changes.quarter = 2
-        } else if (gameObj.drive === 2 * gameObj.totalPossessions + 1 && gameObj.quarter === 2) {
-            changes.gameAction = "half-time"
-        } else if (gameObj.drive === 3 * gameObj.totalPossessions + 1) {
-            changes.quarter = 4
-        } else if (gameObj.drive === 4 * gameObj.totalPossessions + 1) {
-            if (gameObj.teamOneScore !== gameObj.teamTwoScore) changes.gameAction = "full-time"
-            else {
-                changes.gameAction = "over-time"
-                changes.quarter = "OT"
-                changes.drive = "-"
-            }
-        }
-        console.log(gameObj, changes)
-        let payload = { ...gameObj, ...changes }
-        dispatch(updateGame(payload))
-    }, [gameObj.drive, gameObj.gameAction])
+    // useEffect(() => {
+    //     let changes = {}
+    //     if (gameObj.quarter === "OT") {
+    //         if (changes.drive % 2 === 0 && (gameObj.teamOneScore !== gameObj.teamTwoScore)) {
+    //             changes.gameAction = "end-time"
+    //         }
+    //     }
+    //     else if (gameObj.drive === (gameObj.totalPossessions + 1)) {
+    //         changes.quarter = 2
+    //     } else if (gameObj.drive === 2 * gameObj.totalPossessions + 1 && gameObj.quarter === 2) {
+    //         changes.gameAction = "half-time"
+    //     } else if (gameObj.drive === 3 * gameObj.totalPossessions + 1) {
+    //         changes.quarter = 4
+    //     } else if (gameObj.drive === 4 * gameObj.totalPossessions + 1) {
+    //         if (gameObj.teamOneScore !== gameObj.teamTwoScore) changes.gameAction = "full-time"
+    //         else {
+    //             changes.gameAction = "over-time"
+    //             changes.quarter = "OT"
+    //             changes.drive = "-"
+    //         }
+    //     }
+
+    //     let payload = { ...gameObj, ...changes }
+    //     dispatch(updateGame(payload))
+    // }, [gameObj.drive, gameObj.gameAction])
 
     useEffect(() => {
         if (!gameObj?.teamOnePrimaryColor) navigate("/")
@@ -120,10 +120,27 @@ const Game = () => {
                             </div>
                         </div>
                     </div>}
+                    {gameObj.gameAction === "over-time" && <div className="on-downs-wrapper" div onClick={() => {
+                        let payload = { ...gameObj }
+                        payload.gameAction = "coin-flip"
+                        payload.drive = "-"
+                        dispatch(updateGame(payload))
+                    }}>
+                        <h2>Over Time!</h2>
+                        <div className="score-board-row">
+                            <div className="score-board-section" >
+                                <label className="score-board-label" style={{ color: "black" }}>{gameObj.teamOneName}</label>
+                                <div className="score-board-content">{gameObj.teamOneScore}</div>
+                            </div>
+                            <div className="score-board-section" >
+                                <label className="score-board-label" style={{ color: "black" }}>{gameObj.teamTwoName}</label>
+                                <div className="score-board-content">{gameObj.teamTwoScore}</div>
+                            </div>
+                        </div>
+                        <h2>click to continue</h2>
+                    </div>}
                     {gameObj.gameAction === "half-time" && <div onClick={() => {
                         let payload = { ...gameObj }
-                        payload.quarter = 3
-                        payload.drive = gameObj.drive - 1
                         payload.direction = gameObj.secondHalf
                         payload.gameAction = "kick-off"
                         dispatch(updateGame(payload))

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import nextDrive from "../../nextDrive"
 import { updateGame } from "../../store/gameReducer"
 import "./drive.css"
 
@@ -431,9 +432,8 @@ const Drive = () => {
         }
         changes.down = 1
         changes.toGo = 10
-        changes.drive = gameObj.drive + 1
-        console.log(changes)
-        let payload = { ...gameObj, ...changes }
+        let driveChanges = nextDrive(gameObj)
+        let payload = { ...gameObj, ...changes, ...driveChanges }
         dispatch(updateGame(payload))
         setShowTurnover(false)
         setTurnoverSceen2(false)

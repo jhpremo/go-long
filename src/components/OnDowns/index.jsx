@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
+import nextDrive from "../../nextDrive"
 import { updateGame } from "../../store/gameReducer"
 import "./on-downs.css"
 
@@ -10,7 +11,6 @@ const OnDowns = () => {
         let changes = {}
         changes.toGo = 10
         changes.down = 1
-        changes.drive = gameObj.drive + 1
         changes.gameAction = "drive"
         if (gameObj.direction === "-->") {
             changes.direction = "<--"
@@ -20,7 +20,8 @@ const OnDowns = () => {
             changes.direction = "-->"
             if (gameObj.ballOn >= 90) changes.toGo = "-"
         }
-        let payload = { ...gameObj, ...changes }
+        let driveChanges = nextDrive(gameObj)
+        let payload = { ...gameObj, ...changes, ...driveChanges }
         dispatch(updateGame(payload))
     }
     return (

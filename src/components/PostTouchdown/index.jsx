@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import nextDrive from "../../nextDrive"
 import { updateGame } from "../../store/gameReducer"
 import "./post-touchdown.css"
 
@@ -156,10 +157,14 @@ const PostTouchdown = () => {
             changes.down = "-"
             changes.toGo = "-"
             changes.ballOn = "-"
-            let payload = { ...gameObj, ...changes }
+            let driveChanges = nextDrive(gameObj)
+            let payload = { ...gameObj, ...changes, ...driveChanges }
             dispatch(updateGame(payload))
         }
     }
+
+
+
     return (
         <div onClick={handleReady} style={{ cursor: ready }} className="post-touchdown-wrapper">
             {(!togglePAT && !toggleTwo) && <>{gameObj.direction === "-->" && <h2>Touchdown {gameObj.teamOneName}!</h2>}

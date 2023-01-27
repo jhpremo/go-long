@@ -85,8 +85,6 @@ const KickOff = () => {
                 }
                 changes['down'] = 1
             }
-            if (gameObj.drive === "-") changes['drive'] = 1
-            else changes['drive'] = gameObj.drive + 1
             let payload = { ...gameObj, ...changes }
             dispatch(updateGame(payload))
             setReady("pointer")

@@ -1,6 +1,7 @@
 const UPDATEGAME = 'UPDATE/GAME'
 
 export const updateGame = (gameObj) => {
+    console.log(gameObj)
     return {
         type: UPDATEGAME,
         gameObj

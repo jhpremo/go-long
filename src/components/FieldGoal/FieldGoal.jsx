@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import nextDrive from "../../nextDrive"
 import { updateGame } from "../../store/gameReducer"
 import "./field-goal.css"
 
@@ -104,7 +105,6 @@ const FieldGoal = () => {
                 }
             }
 
-            if (nextAction === "drive") changes['drive'] = gameObj.drive + 1
             let payload = { ...gameObj, ...changes }
             dispatch(updateGame(payload))
             setReady("pointer")
@@ -116,7 +116,8 @@ const FieldGoal = () => {
             let payload = { ...gameObj, gameAction: nextAction }
             if (gameObj.direction === "-->") payload.direction = "<--"
             else payload.direction = "-->"
-            dispatch(updateGame(payload))
+            let driveChanges = nextDrive(gameObj)
+            dispatch(updateGame({ ...payload, ...driveChanges }))
         }
     }
     return (
