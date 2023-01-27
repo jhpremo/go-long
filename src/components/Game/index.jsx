@@ -19,7 +19,9 @@ const Game = () => {
     const gameObj = useSelector((state) => state.game)
     const [ballOn, setBallOn] = useState("-")
 
-
+    useEffect(() => {
+        if (gameObj.gameAction) localStorage.setItem("gameObj", JSON.stringify(gameObj))
+    }, [gameObj.gameAction])
     // useEffect(() => {
     //     let changes = {}
     //     if (gameObj.quarter === "OT") {

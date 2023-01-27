@@ -16,6 +16,14 @@ const MainMenu = () => {
     const [teamTwoPrimaryColor, setTeamTwoPrimaryColor] = useState('#0101FD')
     const [teamTwoSecondaryColor, setTeamTwoSecondaryColor] = useState('#FFFFFF')
     const [totalPossessions, setTotalPossessions] = useState(4)
+    const [existingGame, setExistingGame] = useState(false)
+
+    useEffect(() => {
+        let game = localStorage.getItem("gameObj")
+        if (game) {
+            setExistingGame(true)
+        }
+    }, [])
 
     useEffect(() => {
         let payload = {
@@ -52,14 +60,21 @@ const MainMenu = () => {
         dispatch(updateGame(payload))
         navigate("/game")
     }
+
+    const handleResume = () => {
+        let payload = JSON.parse(localStorage.getItem("gameObj"))
+        console.log(payload)
+        dispatch(updateGame(payload))
+        navigate("/game")
+    }
+
     return (
         <div className="main-menu-wrapper">
             <div className="main-menu-top-half">
                 {toggleMainMenu && <h1 className="main-menu-title">Go Long</h1>}
                 {toggleMainMenu && <div className="main-menu-button-container">
                     <button onClick={() => setToggleMainMenu(false)} className="main-menu-button">New Game</button>
-                    {/* <button className="main-menu-button">Resume</button>
-                    <button className="main-menu-button">Options</button> */}
+                    {existingGame && <button className="main-menu-button" onClick={handleResume}>Resume</button>}
                 </div>}
                 {!toggleMainMenu && <div className="team-select-wrapper">
                     <button onClick={() => setToggleMainMenu(true)} className="back-button"><i className="fa-solid fa-arrow-left" /></button>
