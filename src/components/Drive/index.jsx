@@ -30,6 +30,7 @@ const Drive = () => {
     const [turnoverMessage, setTurnoverMessage] = useState()
     const [showPick6, setShowPick6] = useState(false)
     const [showTurnoverScreen2, setTurnoverSceen2] = useState(false)
+    const [rolling, setRolling] = useState(false)
     useEffect(() => {
         if (canRoll) {
             setRollButtonColor("#c7f4c7")
@@ -125,6 +126,7 @@ const Drive = () => {
         setSackRolled(false)
         setSackMessage()
         setCanRoll(false)
+        setRolling(true)
         let whiteResult, blueResult, green1Result, green2Result, green3Result
         const roll = () => {
             whiteResult = whiteDieSides[(Math.floor(Math.random() * (12 - 1 + 1) + 1))]
@@ -142,6 +144,7 @@ const Drive = () => {
         setTimeout(() => finish(interval), 3000)
 
         const finish = (interval) => {
+            setRolling(false)
             clearInterval(interval)
             if (whiteResult === "flag") {
                 setShowFlag(true)
@@ -200,7 +203,7 @@ const Drive = () => {
     }, [gameObj.ballOn, gameObj.toGo, gameObj.down, usedBlue, usedGreen1, usedGreen2, usedGreen3])
 
     const handlePlayBlue = () => {
-        if (!faceUpBlue && faceUpBlue !== 0) return
+        if ((!faceUpBlue && faceUpBlue !== 0) || rolling) return
         setUsedBlue(true)
         let changes = {}
         if (faceUpBlue === "TD") {
@@ -225,7 +228,7 @@ const Drive = () => {
     }
 
     const handlePlayGreen1 = () => {
-        if (!faceUpGreen1 && faceUpGreen1 !== 0) return
+        if ((!faceUpGreen1 && faceUpGreen1 !== 0) || rolling) return
         setUsedGreen1(true)
         let changes = {}
 
@@ -244,7 +247,7 @@ const Drive = () => {
     }
 
     const handlePlayGreen2 = () => {
-        if (!faceUpGreen2 && faceUpGreen2 !== 0) return
+        if ((!faceUpGreen2 && faceUpGreen2 !== 0) || rolling) return
         setUsedGreen2(true)
         let changes = {}
 
@@ -263,7 +266,7 @@ const Drive = () => {
     }
 
     const handlePlayGreen3 = () => {
-        if (!faceUpGreen3 && faceUpGreen3 !== 0) return
+        if ((!faceUpGreen3 && faceUpGreen3 !== 0) || rolling) return
         setUsedGreen3(true)
         let changes = {}
 

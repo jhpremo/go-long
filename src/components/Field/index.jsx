@@ -38,14 +38,34 @@ const Field = () => {
                 <div className={toggleFootball} style={{ left: `${gameObj.ballOn - 2.5}%` }}></div>
                 <div className={toggleBlueLine} style={{ left: `${gameObj.ballOn - 0.5}%` }}></div>
                 <div className="ten-yard" id="first"></div>
+                <div className="field-number-top" style={{ left: "7%" }}>1 0</div>
+                <div className="field-number-bottom" style={{ left: "7%" }}>1 0</div>
                 <div className="ten-yard"></div>
+                <div className="field-number-top" style={{ left: "17%" }}>2 0</div>
+                <div className="field-number-bottom" style={{ left: "17%" }}>2 0</div>
                 <div className="ten-yard"></div>
+                <div className="field-number-top" style={{ left: "27%" }}>3 0</div>
+                <div className="field-number-bottom" style={{ left: "27%" }}>3 0</div>
                 <div className="ten-yard"></div>
+                <div className="field-number-top" style={{ left: "37%" }}>4 0</div>
+                <div className="field-number-bottom" style={{ left: "37%" }}>4 0</div>
                 <div className="ten-yard" id="fifty-yard"></div>
+                <div className="field-number-top" style={{ left: "47%" }}>5</div>
+                <div className="field-number-bottom" style={{ left: "47%" }}>5</div>
+                <div className="field-number-top" style={{ left: "51%" }}>0</div>
+                <div className="field-number-bottom" style={{ left: "51%" }}>0</div>
                 <div className="ten-yard"></div>
+                <div className="field-number-top" style={{ left: "57.5%" }}>4 0</div>
+                <div className="field-number-bottom" style={{ left: "57.5%" }}>4 0</div>
                 <div className="ten-yard"></div>
+                <div className="field-number-top" style={{ left: "67.5%" }}>3 0</div>
+                <div className="field-number-bottom" style={{ left: "67.5%" }}>3 0</div>
                 <div className="ten-yard"></div>
+                <div className="field-number-top" style={{ left: "77.5%" }}>2 0</div>
+                <div className="field-number-bottom" style={{ left: "77.5%" }}>2 0</div>
                 <div className="ten-yard" id="last"></div>
+                <div className="field-number-top" style={{ left: "87.5%" }}>1 0</div>
+                <div className="field-number-bottom" style={{ left: "87.5%" }}>1 0</div>
             </div>
             <div className="end-zone-2" style={{ backgroundColor: gameObj.teamTwoPrimaryColor }}><div style={{ color: gameObj.teamTwoSecondaryColor }}>{gameObj.teamTwoName}</div></div>
         </div>
