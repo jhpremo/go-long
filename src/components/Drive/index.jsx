@@ -331,7 +331,7 @@ const Drive = () => {
                     } else {
                         changes.ballOn = gameObj.ballOn + PI
                     }
-                    changes.toGo = gameObj.toGo - PI
+                    changes.toGo = 10
                     changes.down = 1
                     resetFirstDown()
                 } else if (yellowResult === "offset") {
@@ -559,11 +559,13 @@ const Drive = () => {
             </div>
             <div className="punt-fg-wrapper">
                 <button onClick={() => {
+                    if (!canRoll) return
                     let payload = { ...gameObj }
                     payload.gameAction = "punt"
                     dispatch(updateGame(payload))
                 }} className="drive-button" style={{ backgroundColor: rollButtonColor }}>Punt</button>
                 <button onClick={() => {
+                    if (!canRoll) return
                     let payload = { ...gameObj }
                     payload.gameAction = "field-goal"
                     dispatch(updateGame(payload))
