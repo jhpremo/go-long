@@ -559,16 +559,20 @@ const Drive = () => {
             </div>
             <div className="punt-fg-wrapper">
                 <button onClick={() => {
-                    if (!canRoll) return
-                    let payload = { ...gameObj }
-                    payload.gameAction = "punt"
-                    dispatch(updateGame(payload))
+                    if (canRoll && !rolling) {
+                        let payload = { ...gameObj }
+                        payload.gameAction = "punt"
+                        dispatch(updateGame(payload))
+
+                    }
                 }} className="drive-button" style={{ backgroundColor: rollButtonColor }}>Punt</button>
                 <button onClick={() => {
-                    if (!canRoll) return
-                    let payload = { ...gameObj }
-                    payload.gameAction = "field-goal"
-                    dispatch(updateGame(payload))
+                    if (canRoll && !rolling) {
+                        let payload = { ...gameObj }
+                        payload.gameAction = "field-goal"
+                        dispatch(updateGame(payload))
+
+                    }
                 }} className="drive-button" style={{ backgroundColor: rollButtonColor }}>Field Goal</button>
             </div>
         </div >
